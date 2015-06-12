@@ -1,0 +1,9 @@
+edemy_facebook_login:
+    path:           /facebook/login
+    defaults:       { _controller: edemy.main:indexAction }
+    methods:        [ GET ]
+
+edemy_facebook_likes:
+    path:           /admin/es/facebook/likes
+    defaults:       { _controller: edemy.facebook:likesAction }
+    methods:        [ GET ]

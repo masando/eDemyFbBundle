@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style type="text/css">
+    .Table
+    {
+        display: table;
+    }
+    .Title
+    {
+        display: table-caption;
+        text-align: center;
+        font-weight: bold;
+        font-size: larger;
+    }
+    .Heading
+    {
+        display: table-row;
+        font-weight: bold;
+        text-align: center;
+    }
+    .Row
+    {
+        display: table-row;
+    }
+    .Cell
+    {
+        display: table-cell;
+        border: solid;
+        border-width: thin;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+</style>
+</head>
+<body>
+    <div class="Table">
+        <div class="Title">
+            <p>Namaste Likes</p>
+        </div>
+        <div class="Heading">
+            <div class="Cell">
+                <p>Name</p>
+            </div>
+            <div class="Cell">
+                <p>Likes</p>
+            </div>
+            <div class="Cell">
+                <p>Diff</p>
+            </div>
+        </div>
+    {% for page in pages %}
+        <div class="Row">
+            <div class="Cell">
+                <p>{{ page.name }}</p>
+            </div>
+            <div class="Cell">
+                <p>{{ page.likes }}</p>
+            </div>
+            <div class="Cell">
+                <p>{{ page.likes - pages.tecafeycomplementos.likes }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</body>
