@@ -1,13 +1,13 @@
 <?php
 
-namespace eDemy\FacebookBundle\Entity;
+namespace eDemy\FbBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use eDemy\MainBundle\Entity\BaseEntity;
 
 /**
- * @ORM\Entity(repositoryClass="eDemy\FacebookBundle\Entity\FacebookObjectRepository")
+ * @ORM\Entity(repositoryClass="eDemy\FbBundle\Entity\FacebookObjectRepository")
  * @ORM\Table()
  */
 class FacebookObject extends BaseEntity

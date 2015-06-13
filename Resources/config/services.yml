@@ -1,10 +1,10 @@
 services:
     edemy.facebook:
-        class: eDemy\FacebookBundle\Controller\FacebookController
+        class: eDemy\FbBundle\Controller\FbController
         calls:
             - [setEventDispatcher, ["@event_dispatcher"]]
         tags:
             - { name: kernel.event_subscriber }
 
-    edemy.getlikes:
-        class: "eDemy\FacebookBundle\Command\GetLikesCommand"
+#    edemy.getlikes:
+#        class: eDemy\FbBundle\Command\GetLikesCommand

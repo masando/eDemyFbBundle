@@ -1,6 +1,6 @@
 <?php
 
-namespace eDemy\FacebookBundle\Controller;
+namespace eDemy\FbBundle\Controller;
 
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -10,7 +10,7 @@ use Facebook as FB;
 use eDemy\MainBundle\Controller\BaseController;
 use eDemy\MainBundle\Event\ContentEvent;
 
-class FacebookController extends BaseController
+class FbController extends BaseController
 {
     public static function getSubscribedEvents()
     {
@@ -58,7 +58,7 @@ class FacebookController extends BaseController
 
         //$pages = uasort($pages, $this->cmp());
         //die(var_dump($pages));
-        return $this->newResponse($this->render('likes.html.twig', array('pages' => $pages)));
+        return $this->newResponse($this->render('templates/likes', array('pages' => $pages)));
     }
 
     public function cmp($a, $b)
@@ -110,7 +110,7 @@ class FacebookController extends BaseController
             $_SESSION['EMAIL'] =  $femail;
             //checkuser($fuid,$ffname,$femail);
             //header("Location: index.php");
-            $this->addEventModule($event, 'test.html.twig', array(
+            $this->addEventModule($event, 'templates/testFb', array(
                 'fbfullname' => $fbfullname,
             ));
         } else {
@@ -121,7 +121,7 @@ class FacebookController extends BaseController
 
     public function onFacebookLogin2(ContentEvent $event)
     {
-        $this->addEventModule($event, 'login.html.twig');
+        $this->addEventModule($event, 'templates/loginFb');
 
         return true;
     }
@@ -130,7 +130,7 @@ class FacebookController extends BaseController
         if($this->getRoute() != 'edemy_main_frontpage') {
             $likeurl = $this->getParam('likeurl');
             if($likeurl != 'likeurl') {
-                $this->addEventModule($event, 'precontent.html.twig', array(
+                $this->addEventModule($event, 'templates/precontentFb', array(
                     'likeurl' => $likeurl,
                 ));
             }
@@ -142,7 +142,7 @@ class FacebookController extends BaseController
     public function onMetaModule(ContentEvent $event) {
         $pixel_id = $this->getParam('facebook.pixel_id');
         if($pixel_id != 'facebook.pixel_id') {
-            $this->addEventModule($event, 'meta_module.html.twig', array(
+            $this->addEventModule($event, 'templates/meta_module', array(
                 'pixel_id' => $pixel_id,
             ));
         }

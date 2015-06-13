@@ -1,6 +1,6 @@
 <?php
 
-namespace eDemy\FacebookBundle\Entity;
+namespace eDemy\FbBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
