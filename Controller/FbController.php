@@ -18,6 +18,8 @@ class FbController extends BaseController
             'edemy_facebook_login'      => array('onFacebookLogin', 0),
             'edemy_meta_module'         => array('onMetaModule', 0),
             'edemy_precontent_module'   => array('onPreContentModule', 0),
+            'edemy_facebook_sorteo'     => array('onSorteo', 0),
+
         ));
     }
 
@@ -118,6 +120,42 @@ class FbController extends BaseController
         }
     }
 
+    public function onSorteo(ContentEvent $event)
+    {
+        FB\FacebookSession::setDefaultApplication('', 'token');
+        $redirectUrl = $this->get('router')->generate('edemy_facebook_login', array(), true);
+        $helper = new FB\FacebookRedirectLoginHelper($redirectUrl);
+        try {
+            if($this->get('session')->get('facebook_token')) {
+                $session = new FB\FacebookSession($this->get('session')->get('facebook_token'));
+            } else {
+                $session = $helper->getSessionFromRedirect();
+            }
+        } catch(FB\FacebookRequestException $ex) {
+        } catch(\Exception $ex) {
+        }
+        if (isset($session)) {
+            $this->get('session')->set('facebook_token', $session->getToken());
+            // graph api request for user data
+            $request = new FB\FacebookRequest( $session, 'GET', '/me' );
+            $response = $request->execute();
+            // get response
+            $graphObject = $response->getGraphObject();
+            $fbid = $graphObject->getProperty('id');              // To Get Facebook ID
+            $fbfullname = $graphObject->getProperty('name'); // To Get Facebook full name
+            $femail = $graphObject->getProperty('email');    // To Get Facebook email ID
+            $_SESSION['FBID'] = $fbid;
+            $_SESSION['FULLNAME'] = $fbfullname;
+            $_SESSION['EMAIL'] =  $femail;
+            //checkuser($fuid,$ffname,$femail);
+            //header("Location: index.php");
+            $this->addEventModule($event, 'templates/testFb', array(
+                'fbfullname' => $fbfullname,
+            ));
+        } else {
+            $event->addEventModule($event, 'templates/fbSorteoPuraAlegria');
+        }
+    }
 
     public function onFacebookLogin2(ContentEvent $event)
     {

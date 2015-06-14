@@ -3,6 +3,8 @@
 namespace eDemy\FbBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 
 class FacebookObjectRepository extends EntityRepository
 {

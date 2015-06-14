@@ -7,3 +7,8 @@ edemy_facebook_likes:
     path:           /admin/es/facebook/likes
     defaults:       { _controller: edemy.facebook:likesAction }
     methods:        [ GET ]
+
+edemy_facebook_sorteo_relojes:
+    path:           /fb/sorteopuraalegria
+    defaults:       { _controller: edemy.main:indexAction }
+    methods:        [ GET ]

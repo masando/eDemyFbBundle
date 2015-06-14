@@ -3,6 +3,8 @@
 namespace eDemy\FbBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 use Doctrine\Common\Collections\ArrayCollection;
 use eDemy\MainBundle\Entity\BaseEntity;
 
