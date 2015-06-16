@@ -8,7 +8,12 @@ edemy_facebook_likes:
     defaults:       { _controller: edemy.facebook:likesAction }
     methods:        [ GET ]
 
-edemy_facebook_sorteo_relojes:
-    path:           /fb/sorteopuraalegria
+edemy_facebook_promo:
+    path:           /fb/promo/{id}
+    defaults:       { _controller: edemy.main:indexAction, id:1 }
+    methods:        [ GET ]
+
+edemy_facebook_privacy:
+    path:           /fb/privacidad
     defaults:       { _controller: edemy.main:indexAction }
     methods:        [ GET ]
