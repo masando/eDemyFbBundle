@@ -60,7 +60,7 @@ class FbController extends BaseController
 
         //$pages = uasort($pages, $this->cmp());
         //die(var_dump($pages));
-        return $this->newResponse($this->render('templates/likes', array('pages' => $pages)));
+        return $this->newResponse($this->render('templates/fb/likes', array('pages' => $pages)));
     }
 
     public function cmp($a, $b)
@@ -85,12 +85,12 @@ class FbController extends BaseController
 
     public function onFacebookPrivacy(ContentEvent $event)
     {
-        $this->addEventModule($event, 'templates/fbPrivacy');
+        $this->addEventModule($event, 'templates/fb/fbPrivacy');
     }
 
     public function onFacebookLogin(ContentEvent $event)
     {
-        FB\FacebookSession::setDefaultApplication('882199081823442', '3550bed57545c7240765f0b3967d1639');
+        FB\FacebookSession::setDefaultApplication('', '');
         $redirectUrl = $this->get('router')->generate('edemy_facebook_login', array(), true);
         $helper = new FB\FacebookRedirectLoginHelper($redirectUrl);
         try {
@@ -117,7 +117,7 @@ class FbController extends BaseController
             $_SESSION['EMAIL'] =  $femail;
             //checkuser($fuid,$ffname,$femail);
             //header("Location: index.php");
-            $this->addEventModule($event, 'templates/testFb', array(
+            $this->addEventModule($event, 'templates/fb/testFb', array(
                 'fbfullname' => $fbfullname,
             ));
         } else {
@@ -133,7 +133,7 @@ class FbController extends BaseController
         $required_scope     = 'public_profile, publish_actions, email'; //Permissions required
         $redirectUrl = $this->get('router')->generate('edemy_facebook_promo', array(), true);
 
-        FB\FacebookSession::setDefaultApplication('882199081823442', '3550bed57545c7240765f0b3967d1639');
+        FB\FacebookSession::setDefaultApplication('', '');
         $helper = new FB\FacebookRedirectLoginHelper($redirectUrl);
 
         try {
@@ -149,7 +149,7 @@ class FbController extends BaseController
             //$graphObject->getProperty("email");
             echo print_r($user_profile);
 
-            $this->addEventModule($event, 'templates/fbPromo', array(
+            $this->addEventModule($event, 'templates/fb/fbPromo', array(
                 'id' => $user_profile->getProperty('id'),
                 'name' => $user_profile->getProperty('name'),
                 'first_name' => $user_profile->getProperty('first_name'),
@@ -164,7 +164,7 @@ class FbController extends BaseController
             ));
         } else {
             $login_url = $helper->getLoginUrl( array( 'scope' => $required_scope ) );
-            $this->addEventModule($event, 'templates/fbPromo', array(
+            $this->addEventModule($event, 'templates/fb/fbPromo', array(
                 'login_url' => $login_url,
             ));
         }
@@ -209,7 +209,7 @@ class FbController extends BaseController
 
     public function onFacebookLogin2(ContentEvent $event)
     {
-        $this->addEventModule($event, 'templates/loginFb');
+        $this->addEventModule($event, 'templates/fb/loginFb');
 
         return true;
     }
@@ -218,7 +218,7 @@ class FbController extends BaseController
         if($this->getRoute() != 'edemy_main_frontpage') {
             $likeurl = $this->getParam('likeurl');
             if($likeurl != 'likeurl') {
-                $this->addEventModule($event, 'templates/precontentFb', array(
+                $this->addEventModule($event, 'templates/fb/precontentFb', array(
                     'likeurl' => $likeurl,
                 ));
             }
@@ -230,7 +230,7 @@ class FbController extends BaseController
     public function onMetaModule(ContentEvent $event) {
         $pixel_id = $this->getParam('facebook.pixel_id');
         if($pixel_id != 'facebook.pixel_id') {
-            $this->addEventModule($event, 'templates/meta_module', array(
+            $this->addEventModule($event, 'templates/fb/meta_module', array(
                 'pixel_id' => $pixel_id,
             ));
         }
@@ -244,7 +244,7 @@ class FbController extends BaseController
         $output = new BufferedOutput();
         $command = $this->get("edemy.get.likes");
         $command->run($input, $output);
-die(var_dump($output->fetch()));
+        die(var_dump($output->fetch()));
         return $output->fetch();
     }
 }
