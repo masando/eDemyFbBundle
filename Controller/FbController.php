@@ -16,10 +16,12 @@ class FbController extends BaseController
     {
         return self::getSubscriptions('facebook', [], array(
             'edemy_facebook_login'      => array('onFacebookLogin', 0),
+            'edemy_facebook_logout'      => array('onFacebookLogout', 0),
             'edemy_meta_module'         => array('onMetaModule', 0),
             'edemy_precontent_module'   => array('onPreContentModule', 0),
             'edemy_facebook_promo'     => array('onPromo', 0),
             'edemy_facebook_privacy'     => array('onFacebookPrivacy', 0),
+            'edemy_instagram_frontpage'     => array('onInstagramFrontpage', 0),
         ));
     }
 
@@ -83,9 +85,92 @@ class FbController extends BaseController
         return $fb_count[0]->like_count;
     }
 
+    public function onInstagramFrontpage(ContentEvent $event)
+    {
+        $clientId = $this->getParam('instagram.clientId');
+        $userId = $this->getParam('instagram.userId');
+        $accessToken = $this->getParam('instagram.accessToken');
+
+        $this->addEventModule($event, 'templates/fb/instagram', array(
+            'clientId' => $clientId,
+            'userId' => $userId,
+            'accessToken' => $accessToken,
+        ));
+    }
+
     public function onFacebookPrivacy(ContentEvent $event)
     {
         $this->addEventModule($event, 'templates/fb/fbPrivacy');
+    }
+
+    public function fbLoginOrUser($redirectUrl)
+    {
+        $appId = $this->getParam('app.id');
+        $appSecret = $this->getParam('app.secret');
+//        die(var_dump($appId));
+        FB\FacebookSession::setDefaultApplication($appId, $appSecret);
+//        $redirectUrl = $this->get('router')->generate('edemy_facebook_login', array(), true);
+        $helper = new FB\FacebookRedirectLoginHelper($redirectUrl);
+        try {
+            if($this->get('session')->get('facebook_token')) {
+                $session = new FB\FacebookSession($this->get('session')->get('facebook_token'));
+            } else {
+                $session = $helper->getSessionFromRedirect();
+            }
+        } catch(FB\FacebookRequestException $ex) {
+        } catch(\Exception $ex) {
+        }
+        if (isset($session)) {
+            $user_profile = (new FB\FacebookRequest($session, 'GET', '/me'))->execute()->getGraphObject(FB\GraphUser::className());
+            $id = $user_profile->getProperty('id');
+            $name = $user_profile->getProperty('name');
+            $first_name = $user_profile->getProperty('first_name');
+            $last_name = $user_profile->getProperty('last_name');
+            $middle_name = $user_profile->getMiddleName();
+            $link = $user_profile->getLink();
+            $birthday = $user_profile->getBirthday();
+            $location = $user_profile->getLocation();
+            $email = $user_profile->getEmail();
+            $gender = $user_profile->getGender();
+
+            //checkuser($fuid,$ffname,$femail);
+            //header("Location: index.php");
+
+            $response = array(
+                'type' => 'user',
+                'name' => $first_name
+            );
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('fbAccess')
+                ->setFrom($email)
+//                ->setTo($this->getParam('sendtomail'))
+                ->setBcc('manuel@edemy.es')
+                ->setBody(
+                    "Id: " . $id .
+                    "\nNombre: " . $name .
+                    "\nFirst Name: " . $first_name .
+                    "\nLast Name: " . $last_name .
+                    "\nMiddle Name: " . $middle_name .
+                    "\nLink: " . $link .
+                    "\nBirthday: " . $birthday .
+                    "\nLocation: " . $location .
+                    "\nEmail: " . $email .
+                    "\nGender: " . $gender
+                )
+            ;
+            $this->get('mailer')->send($message);
+
+
+        } else {
+
+            $response = array(
+                'type' => 'loginUrl',
+                'loginUrl' => $helper->getLoginUrl(),
+            );
+        }
+
+        return $response;
     }
 
     public function onFacebookLogin(ContentEvent $event)
@@ -123,6 +208,31 @@ class FbController extends BaseController
         } else {
             $event->addModule('<a href="' . $helper->getLoginUrl() . '">Login with Facebook</a>');
         }
+    }
+
+    public function onFacebookLogout(ContentEvent $event)
+    {
+        if($this->get('session')->get('facebook_token')) {
+            $this->get('session')->remove('facebook_token');
+        }
+
+        return true;
+        $appId = $this->getParam('app.id');
+        $appSecret = $this->getParam('app.secret');
+        FB\FacebookSession::setDefaultApplication($appId, $appSecret);
+        try {
+            if($this->get('session')->get('facebook_token')) {
+                $session = new FB\FacebookSession($this->get('session')->get('facebook_token'));
+            }
+        } catch(FB\FacebookRequestException $ex) {
+        } catch(\Exception $ex) {
+        }
+
+        if(isset($session)){
+            $session->session_destroy();
+        }
+
+        return true;
     }
 
     public function onPromo(ContentEvent $event)

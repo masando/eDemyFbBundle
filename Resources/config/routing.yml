@@ -3,6 +3,11 @@ edemy_facebook_login:
     defaults:       { _controller: edemy.main:indexAction }
     methods:        [ GET ]
 
+edemy_facebook_logout:
+    path:           /facebook/logout
+    defaults:       { _controller: edemy.main:indexAction }
+    methods:        [ GET ]
+
 edemy_facebook_likes:
     path:           /admin/es/facebook/likes
     defaults:       { _controller: edemy.facebook:likesAction }
@@ -15,5 +20,10 @@ edemy_facebook_promo:
 
 edemy_facebook_privacy:
     path:           /fb/privacidad
+    defaults:       { _controller: edemy.main:indexAction }
+    methods:        [ GET ]
+
+edemy_instagram_frontpage:
+    path:           /fb/instagram
     defaults:       { _controller: edemy.main:indexAction }
     methods:        [ GET ]

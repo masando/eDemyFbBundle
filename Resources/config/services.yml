@@ -1,5 +1,5 @@
 services:
-    edemy.facebook:
+    edemy.fb:
         class: eDemy\FbBundle\Controller\FbController
         calls:
             - [setEventDispatcher, ["@event_dispatcher"]]
