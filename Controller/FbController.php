@@ -27,6 +27,7 @@ class FbController extends BaseController
 
     public function likesAction()
     {
+        $this->setContainer($this->get('service_container'));
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'No tienes permisos para acceder a este recurso!');
         //$input = new ArgvInput(array());
         //$output = new BufferedOutput();
