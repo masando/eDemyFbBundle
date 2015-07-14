@@ -47,14 +47,14 @@ class FbExtension extends \Twig_Extension
             foreach ($tags as $tag) {
                 if (strpos($tag->getName(), "#") !== false) {
                     //@REVISAR INTERESANTE
-                    $eDemyFb = $this->container->get('edemy.fb');
+                    $eDemyFb = $this->container->get('edemy.facebook');
                     $clientId = $eDemyFb->getParam('instagram.clientId');
 //                    $userId = $eDemyFb->getParam('instagram.userId');
                     $accessToken = $eDemyFb->getParam('instagram.accessToken');
                     $userId = $this->getInstaID(substr($tag->getName(), 1), $accessToken);
 
                     $content = $this->container->get('edemy.main')->render(
-                        'templates/fb/instagram',
+                        'templates/facebook/instagram',
                         array(
                             'clientId' => $clientId,
                             'userId' => $userId,
@@ -90,6 +90,6 @@ class FbExtension extends \Twig_Extension
 
     public function getName()
     {
-        return 'edemy_fb_extension';
+        return 'edemy_facebook_extension';
     }
 }

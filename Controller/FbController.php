@@ -33,36 +33,25 @@ class FbController extends BaseController
         //$command->run($input, $output);
         //return $this->newResponse($output->fetch());
         //die(var_dump($output->fetch()));
+        $pages = $this->getParam('facebook.page.likes');
+        $ref = $this->getParam('facebook.page.ref');
 
-        $pages = array();
-        $name = 'name';
-        $pages[$name]['name'] = $name;
-        $pages[$name]['likes'] = $this->facebook_count($name);
-        $name = 'name';
-        $pages[$name]['name'] = $name;
-        $pages[$name]['likes'] = $this->facebook_count($name);
-        $name = 'name';
-        $pages[$name]['name'] = $name;
-        $pages[$name]['likes'] = $this->facebook_count($name);
-        $name = 'name';
-        $pages[$name]['name'] = $name;
-        $pages[$name]['likes'] = $this->facebook_count($name);
-        $name = 'name';
-        $pages[$name]['name'] = $name;
-        $pages[$name]['likes'] = $this->facebook_count($name);
-        $name = 'name';
-        $pages[$name]['name'] = $name;
-        $pages[$name]['likes'] = $this->facebook_count($name);
-        $name = 'name';
-        $pages[$name]['name'] = $name;
-        $pages[$name]['likes'] = $this->facebook_count($name);
-        $name = 'name';
-        $pages[$name]['name'] = $name;
-        $pages[$name]['likes'] = $this->facebook_count($name);
+        $list = array();
+        if(count($pages)) {
+            foreach($pages as $page) {
+                $name = $page->getValue();
+                $list[$name]['name'] = $name;
+                $list[$name]['likes'] = $this->facebook_count($name);
+            }
+        }
 
-        //$pages = uasort($pages, $this->cmp());
-        //die(var_dump($pages));
-        return $this->newResponse($this->render('templates/fb/likes', array('pages' => $pages)));
+        uasort($list, array( $this, 'cmp' ));
+        $ref = $this->facebook_count($ref);
+
+        return $this->newResponse($this->render('templates/facebook/likes', array(
+            'pages' => $list,
+            'ref' => $ref,
+        )));
     }
 
     public function cmp($a, $b)
@@ -91,7 +80,7 @@ class FbController extends BaseController
         $userId = $this->getParam('instagram.userId');
         $accessToken = $this->getParam('instagram.accessToken');
 
-        $this->addEventModule($event, 'templates/fb/instagram', array(
+        $this->addEventModule($event, 'templates/facebook/instagram', array(
             'clientId' => $clientId,
             'userId' => $userId,
             'accessToken' => $accessToken,
@@ -100,7 +89,7 @@ class FbController extends BaseController
 
     public function onFacebookPrivacy(ContentEvent $event)
     {
-        $this->addEventModule($event, 'templates/fb/fbPrivacy');
+        $this->addEventModule($event, 'templates/facebook/fbPrivacy');
     }
 
     public function fbLoginOrUser($redirectUrl)
@@ -202,7 +191,7 @@ class FbController extends BaseController
             $_SESSION['EMAIL'] =  $femail;
             //checkuser($fuid,$ffname,$femail);
             //header("Location: index.php");
-            $this->addEventModule($event, 'templates/fb/testFb', array(
+            $this->addEventModule($event, 'templates/facebook/testFb', array(
                 'fbfullname' => $fbfullname,
             ));
         } else {
@@ -259,7 +248,7 @@ class FbController extends BaseController
             //$graphObject->getProperty("email");
             echo print_r($user_profile);
 
-            $this->addEventModule($event, 'templates/fb/fbPromo', array(
+            $this->addEventModule($event, 'templates/facebook/fbPromo', array(
                 'id' => $user_profile->getProperty('id'),
                 'name' => $user_profile->getProperty('name'),
                 'first_name' => $user_profile->getProperty('first_name'),
@@ -274,7 +263,7 @@ class FbController extends BaseController
             ));
         } else {
             $login_url = $helper->getLoginUrl( array( 'scope' => $required_scope ) );
-            $this->addEventModule($event, 'templates/fb/fbPromo', array(
+            $this->addEventModule($event, 'templates/facebook/fbPromo', array(
                 'login_url' => $login_url,
             ));
         }
@@ -319,7 +308,7 @@ class FbController extends BaseController
 
     public function onFacebookLogin2(ContentEvent $event)
     {
-        $this->addEventModule($event, 'templates/fb/loginFb');
+        $this->addEventModule($event, 'templates/facebook/loginFb');
 
         return true;
     }
@@ -328,7 +317,7 @@ class FbController extends BaseController
         if($this->getRoute() != 'edemy_main_frontpage') {
             $likeurl = $this->getParam('likeurl');
             if($likeurl != 'likeurl') {
-                $this->addEventModule($event, 'templates/fb/precontentFb', array(
+                $this->addEventModule($event, 'templates/facebook/precontentFb', array(
                     'likeurl' => $likeurl,
                 ));
             }
@@ -340,7 +329,7 @@ class FbController extends BaseController
     public function onMetaModule(ContentEvent $event) {
         $pixel_id = $this->getParam('facebook.pixel_id');
         if($pixel_id != 'facebook.pixel_id') {
-            $this->addEventModule($event, 'templates/fb/meta_module', array(
+            $this->addEventModule($event, 'templates/facebook/meta_module', array(
                 'pixel_id' => $pixel_id,
             ));
         }
