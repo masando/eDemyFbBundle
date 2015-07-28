@@ -96,10 +96,10 @@ class FbController extends BaseController
 
     public function fbLoginOrUser($redirectUrl)
     {
-        $appId = $this->getParam('app.id');
-        $appSecret = $this->getParam('app.secret');
-//        die(var_dump($appId));
-        FB\FacebookSession::setDefaultApplication($appId, $appSecret);
+        $a_i = $this->getParam('a.i');
+        $a_s = $this->getParam('a.s');
+//        die(var_dump($a_i));
+        FB\FacebookSession::setDefaultApplication($a_i, $a_s);
 //        $redirectUrl = $this->get('router')->generate('edemy_facebook_login', array(), true);
         $helper = new FB\FacebookRedirectLoginHelper($redirectUrl);
         try {
@@ -208,9 +208,9 @@ class FbController extends BaseController
         }
 
         return true;
-        $appId = $this->getParam('app.id');
-        $appSecret = $this->getParam('app.secret');
-        FB\FacebookSession::setDefaultApplication($appId, $appSecret);
+        $a_i = $this->getParam('a.i');
+        $a_s = $this->getParam('a.s');
+        FB\FacebookSession::setDefaultApplication($a_i, $a_s);
         try {
             if($this->get('session')->get('facebook_token')) {
                 $session = new FB\FacebookSession($this->get('session')->get('facebook_token'));

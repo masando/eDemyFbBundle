@@ -17,9 +17,6 @@ class FacebookObject extends BaseEntity
     public function __construct($em = null)
     {
         parent::__construct($em);
-        //$this->imagenes = new ArrayCollection();
-        //$this->responsables = new ArrayCollection();
-        //$this->horarios = new ArrayCollection();
     }
 
     public function __toString()
