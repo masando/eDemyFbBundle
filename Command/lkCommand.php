@@ -39,6 +39,7 @@ class lkCommand extends ContainerAwareCommand
         $url = 'https://www.facebook.com/' . $url;
         $fql  = "SELECT share_count, like_count, comment_count FROM link_stat WHERE url = '$url'";
         $fqlURL = "https://api.facebook.com/method/fql.query?format=json&query=" . urlencode($fql);
+        //die(var_dump($fqlURL));
         $response = file_get_contents($fqlURL);
         $fb_count = json_decode($response);
 
